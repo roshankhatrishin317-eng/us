@@ -24,6 +24,10 @@ export interface MapLocation {
   lng: number;
   title: string;
   description: string;
+  date?: string;
+  category?: string;
+  images?: string[];
+  notes?: string;
 }
 
 export interface BucketListItem {

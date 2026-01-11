@@ -315,4 +315,30 @@
     background: oklch(0.85 0.10 10 / 0.3);
     color: var(--foreground);
   }
+  
+  /* Leaflet Map Fixes for Vercel */
+  .leaflet-container {
+    font-family: var(--font-sans), system-ui, sans-serif;
+    z-index: 0;
+  }
+  
+  .leaflet-popup-content-wrapper {
+    border-radius: 1rem;
+    padding: 0;
+    overflow: hidden;
+  }
+  
+  .leaflet-popup-content {
+    margin: 0;
+    font-family: var(--font-sans), system-ui, sans-serif;
+  }
+  
+  .leaflet-popup-tip {
+    background: white;
+  }
+  
+  .custom-marker {
+    background: transparent !important;
+    border: none !important;
+  }
 }
