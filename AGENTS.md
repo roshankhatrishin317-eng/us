@@ -4,6 +4,11 @@
 - This file guides agentic coding assistants working in this repo.
 - Follow these rules for commands, style, and structure.
 
+## Git Commits
+- Do NOT add co-author lines to commits.
+- Commits should appear from the user, not from bots.
+- Use simple commit format: `git commit -m "message"`
+
 ## Key Facts
 - Framework: Next.js App Router (`src/app`).
 - Language: TypeScript (`strict: true`).
