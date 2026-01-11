@@ -6,7 +6,11 @@
       "Bash(npx tailwindcss:*)",
       "Bash(npx:*)",
       "Bash(yes:*)",
-      "Bash(npm run lint)"
+      "Bash(npm run lint)",
+      "Bash(find:*)",
+      "Skill(frontend-design:frontend-design)",
+      "Bash(npm run build:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nAdd Noomo ValenTime magical 3D portal experience\n\nImplement award-winning ethereal design with immersive scroll storytelling:\n- Add magical particles \\(golden sparkles, rose petals, glow orbs\\)\n- Create 3D portal entrance with scroll-triggered zoom effect\n- Build scroll-aware sections with parallax animations\n- Enhance CSS with 3D perspective, glowing text, animated borders\n- Update home page with portal, timer display, and feature grid\nEOF\n\\)\")"
     ]
   }
 }

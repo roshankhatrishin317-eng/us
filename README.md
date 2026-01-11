@@ -96,25 +96,30 @@ After deploying to Vercel:
 ```
 src/
 ├── app/
-│   ├── admin/          # Admin panel pages
-│   ├── api/upload/     # File upload API
+│   ├── admin/          # Admin panel (settings, timeline, gallery, locations, quiz, bucket-list, capsule, vault)
+│   ├── api/upload/     # File upload API (Vercel Blob)
 │   ├── bucket-list/    # Bucket list page
 │   ├── capsule/        # Time capsule page
 │   ├── gallery/        # Photo gallery
-│   ├── login/          # Login page
 │   ├── map/            # Interactive map
 │   ├── quiz/           # Relationship quiz
 │   ├── timeline/       # Timeline of events
 │   ├── vault/          # Secret vault
-│   └── page.tsx        # Home page
+│   └── page.tsx        # Home page with 3D portal experience
 ├── components/
-│   ├── ui/             # Reusable UI components
+│   ├── ui/             # Shadcn-style UI primitives (button, card, dialog, input, switch, etc.)
+│   ├── audio-player.tsx
 │   ├── image-upload.tsx
-│   └── map-component.tsx
+│   ├── magical-particles.tsx
+│   ├── map-component.tsx
+│   ├── map-view.tsx
+│   ├── portal-3d.tsx
+│   └── scroll-sections.tsx
 └── lib/
-    ├── store.ts        # Zustand state management
-    ├── data.ts         # Default data
-    └── utils.ts        # Utilities
+    ├── store.ts        # Zustand state management (with localStorage persistence)
+    ├── data.ts         # Static data
+    ├── use-hydrated.ts # Hydration hook for SSR
+    └── utils.ts        # cn() utility for className merging
 ```
 
 ## 🎨 Customization
