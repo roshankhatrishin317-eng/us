@@ -2,9 +2,11 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowLeft, Calendar } from "lucide-react";
+import { ArrowLeft, Calendar, Heart, Sparkles } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { useAppStore, TimelineEvent } from "@/lib/store";
 import { useStoreHydrated } from "@/lib/use-hydrated";
 
@@ -16,50 +18,129 @@ function TimelineItem({ event, index }: { event: TimelineEvent; index: number })
     offset: ["start end", "center center"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], [100, 0]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [0, 1]);
+  const y = useTransform(scrollYProgress, [0, 1], [60, 0]);
+  const opacity = useTransform(scrollYProgress, [0, 0.6], [0, 1]);
+  const scale = useTransform(scrollYProgress, [0, 1], [0.95, 1]);
 
   return (
     <motion.div
       ref={ref}
-      style={{ y, opacity }}
-      className={`flex flex-col md:flex-row gap-8 md:gap-16 items-center mb-24 md:mb-32 ${
-        isEven ? "md:flex-row" : "md:flex-row-reverse"
-      }`}
+      style={{ opacity }}
+      className="relative mb-16 md:mb-24 last:mb-0"
     >
-      {/* Date & Content Side */}
-      <div className={`flex-1 text-center ${isEven ? "md:text-right" : "md:text-left"}`}>
-        <div className="inline-flex items-center gap-2 text-primary/60 text-sm tracking-widest uppercase mb-2 font-medium">
-          <Calendar className="w-4 h-4" />
-          {new Date(event.date).toLocaleDateString("en-US", {
-            month: "long",
-            year: "numeric",
-          })}
-        </div>
-        <h2 className="text-3xl md:text-5xl font-serif text-foreground mb-4">
-          {event.title}
-        </h2>
-        <p className="text-lg text-muted-foreground leading-relaxed max-w-md mx-auto md:mx-0 inline-block">
-          {event.description}
-        </p>
+      {/* Connection Line */}
+      <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px md:-translate-x-1/2">
+        <motion.div
+          style={{ scaleY: scrollYProgress }}
+          className="h-full w-full bg-gradient-to-b from-primary/30 to-primary/10 origin-top"
+        />
       </div>
 
-      {/* Center Line Marker */}
-      <div className="relative flex items-center justify-center shrink-0">
-        <div className="w-px h-full bg-primary/20 absolute top-0 bottom-0 md:-my-32" />
-        <div className="w-4 h-4 rounded-full border-2 border-primary bg-background z-10" />
-      </div>
-
-      {/* Image Side */}
-      <div className="flex-1 w-full">
-        <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-muted shadow-lg shadow-primary/5 group">
-           {/* Placeholder for real image */}
-           <div className="absolute inset-0 bg-stone-200 flex items-center justify-center text-stone-400 group-hover:scale-105 transition-transform duration-700">
-               <span className="sr-only">{event.title}</span>
-               <svg className="w-16 h-16 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-           </div>
+      {/* Content */}
+      <motion.div
+        style={{ y, scale }}
+        className={`flex flex-col md:flex-row gap-6 md:gap-12 items-start md:items-center ${
+          isEven ? "md:flex-row" : "md:flex-row-reverse"
+        }`}
+      >
+        {/* Date Marker */}
+        <div className="flex items-center gap-4 md:hidden pl-12">
+          <Badge variant="glow" className="text-xs">
+            <Calendar className="w-3 h-3 mr-1" />
+            {new Date(event.date).toLocaleDateString("en-US", {
+              month: "short",
+              year: "numeric",
+            })}
+          </Badge>
         </div>
-      </div>
+
+        {/* Text Content */}
+        <div className={`flex-1 pl-12 md:pl-0 ${isEven ? "md:text-right md:pr-16" : "md:text-left md:pl-16"}`}>
+          <motion.div
+            initial={{ opacity: 0, x: isEven ? 20 : -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
+            <div className={`hidden md:flex items-center gap-2 text-primary/60 text-sm tracking-wider uppercase mb-3 ${isEven ? "justify-end" : "justify-start"}`}>
+              <Calendar className="w-4 h-4" />
+              {new Date(event.date).toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </div>
+            <h2 className="text-2xl md:text-4xl font-serif text-foreground mb-3 leading-tight">
+              {event.title}
+            </h2>
+            <p className="text-muted-foreground leading-relaxed max-w-md text-base">
+              {event.description}
+            </p>
+          </motion.div>
+        </div>
+
+        {/* Center Marker */}
+        <div className="absolute left-6 md:left-1/2 md:-translate-x-1/2 top-0 flex items-center justify-center">
+          <motion.div
+            initial={{ scale: 0 }}
+            whileInView={{ scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ type: "spring", delay: 0.1 }}
+            className="relative"
+          >
+            <div className="h-12 w-12 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 backdrop-blur-sm border-2 border-white/50 flex items-center justify-center shadow-lg shadow-primary/10">
+              <Heart className="w-5 h-5 text-primary fill-primary/30" />
+            </div>
+            <motion.div
+              animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="absolute inset-0 rounded-full border border-primary/30"
+            />
+          </motion.div>
+        </div>
+
+        {/* Image */}
+        <div className="flex-1 w-full pl-12 md:pl-0">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            className="relative group"
+          >
+            <div className="glass-card rounded-2xl overflow-hidden hover-lift">
+              <div className="relative aspect-[4/3] bg-muted">
+                {event.image ? (
+                  <Image
+                    src={event.image}
+                    alt={event.title}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-muted to-muted/50">
+                    <div className="text-center">
+                      <Heart className="w-10 h-10 text-muted-foreground/20 mx-auto mb-2" />
+                      <span className="text-sm text-muted-foreground/40">Memory #{index + 1}</span>
+                    </div>
+                  </div>
+                )}
+                
+                {/* Hover Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </div>
+            </div>
+            
+            {/* Floating Number */}
+            <div className={`absolute -bottom-4 ${isEven ? "-left-4" : "-right-4"} hidden md:flex`}>
+              <div className="h-10 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-serif text-lg shadow-lg shadow-primary/30">
+                {index + 1}
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </motion.div>
     </motion.div>
   );
 }
@@ -68,60 +149,134 @@ export default function TimelinePage() {
   const { timeline } = useAppStore();
   const hydrated = useStoreHydrated();
 
-  const sortedTimeline = [...timeline].sort((a, b) => 
-    new Date(a.date).getTime() - new Date(b.date).getTime()
+  const sortedTimeline = [...timeline].sort(
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
   );
 
   if (!hydrated) {
     return (
       <main className="min-h-screen flex items-center justify-center bg-romantic-gradient">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
+        <motion.div
+          animate={{ scale: [1, 1.1, 1] }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+        >
+          <Heart className="w-8 h-8 text-primary/50 fill-primary/30" />
+        </motion.div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-romantic-gradient p-6 md:p-12 relative overflow-hidden">
-        <div className="absolute inset-0 bg-romantic-radial" />
-        <div className="paper-texture" />
-        {/* Background Line */}
-        <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-primary/10 to-transparent -translate-x-1/2 hidden md:block" />
+    <main className="min-h-screen bg-romantic-gradient relative overflow-hidden">
+      <div className="absolute inset-0 bg-romantic-radial" />
+      
+      {/* Animated Orbs */}
+      <motion.div
+        animate={{ scale: [1, 1.2, 1], y: [0, -30, 0] }}
+        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px]"
+      />
+      <motion.div
+        animate={{ scale: [1, 1.15, 1], x: [0, 30, 0] }}
+        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 5 }}
+        className="absolute bottom-[-15%] right-[-10%] w-[600px] h-[600px] bg-secondary/15 rounded-full blur-[100px]"
+      />
+      
+      <div className="paper-texture" />
 
-      <div className="max-w-5xl mx-auto relative z-10">
-        <div className="mb-20 text-center space-y-4">
+      {/* Content */}
+      <div className="relative z-10 container mx-auto px-4 py-8 md:py-12">
+        {/* Header */}
+        <div className="max-w-5xl mx-auto mb-16 md:mb-24 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8"
+          >
             <Button
-                asChild
-                variant="ghost"
-                className="hover:bg-transparent hover:text-primary transition-colors text-muted-foreground mb-4"
+              asChild
+              variant="ghost"
+              className="hover:bg-transparent hover:text-primary text-muted-foreground"
             >
-                <Link href="/">
-                <ArrowLeft className="mr-2 w-4 h-4" /> Back Home
-                </Link>
+              <Link href="/">
+                <ArrowLeft className="mr-2 w-4 h-4" /> Back to Home
+              </Link>
             </Button>
-            <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="font-serif text-5xl md:text-7xl text-foreground tracking-tight"
-            >
-                Our Journey
-            </motion.h1>
-             <motion.div 
-                 initial={{ scaleX: 0 }}
-                 animate={{ scaleX: 1 }}
-                 transition={{ delay: 0.5, duration: 1 }}
-                 className="h-1 w-24 bg-primary/20 mx-auto rounded-full"
-             />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-4"
+          >
+            <Badge variant="glow" className="mx-auto">
+              <Sparkles className="w-3 h-3 mr-1" />
+              {sortedTimeline.length} Milestones
+            </Badge>
+            
+            <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl text-foreground">
+              Our Journey
+            </h1>
+            
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+              className="h-1 w-20 bg-gradient-to-r from-primary/20 via-primary/40 to-primary/20 mx-auto rounded-full"
+            />
+            
+            <p className="text-lg text-muted-foreground max-w-lg mx-auto">
+              Every moment together is a chapter in our love story.
+            </p>
+          </motion.div>
         </div>
 
-        <div className="mt-12">
-          {sortedTimeline.map((event, index) => (
-            <TimelineItem key={event.id} event={event} index={index} />
-          ))}
-        </div>
-        
-        <div className="h-32 flex items-center justify-center text-muted-foreground/40 font-serif italic">
+        {/* Timeline */}
+        {sortedTimeline.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="max-w-md mx-auto"
+          >
+            <div className="glass-card rounded-3xl p-12 text-center">
+              <Calendar className="w-16 h-16 text-muted-foreground/30 mx-auto mb-4" />
+              <h3 className="font-serif text-2xl text-foreground mb-2">No Memories Yet</h3>
+              <p className="text-muted-foreground">Add timeline events from the admin panel to see them here.</p>
+            </div>
+          </motion.div>
+        ) : (
+          <div className="max-w-5xl mx-auto">
+            {sortedTimeline.map((event, index) => (
+              <TimelineItem 
+                key={event.id} 
+                event={event} 
+                index={index}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Footer */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="max-w-5xl mx-auto mt-16 md:mt-24 text-center"
+        >
+          <div className="flex items-center justify-center gap-4">
+            <div className="h-px flex-1 max-w-[100px] bg-gradient-to-r from-transparent to-primary/20" />
+            <motion.div
+              animate={{ scale: [1, 1.1, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              <Heart className="w-6 h-6 text-primary/40 fill-primary/20" />
+            </motion.div>
+            <div className="h-px flex-1 max-w-[100px] bg-gradient-to-l from-transparent to-primary/20" />
+          </div>
+          <p className="text-muted-foreground/50 font-serif italic mt-4 text-lg">
             To be continued...
-        </div>
+          </p>
+        </motion.div>
       </div>
     </main>
   );
