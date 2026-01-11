@@ -1,38 +1,157 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Roshan & Alisha 💕
 
-## Getting Started
+A beautiful, private digital space to celebrate and preserve your relationship memories. Built with love using Next.js 16.
 
-First, run the development server:
+![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8?logo=tailwindcss)
+![Vercel](https://img.shields.io/badge/Deploy-Vercel-black?logo=vercel)
+
+## ✨ Features
+
+### For You & Your Partner
+- **Timeline** - Document your relationship milestones with photos and stories
+- **Gallery** - Store and showcase your favorite memories together
+- **Interactive Map** - Pin locations that are special to you
+- **Quiz** - Test how well you know each other
+- **Bucket List** - Track adventures and dreams together
+- **Time Capsule** - Write messages to your future selves
+- **Secret Vault** - A password-protected space for special messages
+
+### Admin Panel
+- Full content management system at `/admin`
+- Add, edit, and delete all content types
+- Upload images and videos directly (via Vercel Blob)
+- Configure site settings (names, dates, passcodes)
+
+### Design
+- Romantic Rose & Digital Lavender color palette
+- Glassmorphism UI with soft animations
+- Floating hearts and elegant typography
+- Fully responsive for mobile and desktop
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+
+### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/roshankhatrishin317-eng/us.git
+cd us
+
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to see your site.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🔐 Default Passwords
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Area | Password |
+|------|----------|
+| Site Access | `143143` |
+| Admin Panel | `admin123` |
+| Secret Vault | `143143` |
 
-## Learn More
+> ⚠️ Change these in the admin panel before deploying!
 
-To learn more about Next.js, take a look at the following resources:
+## 📦 Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Deploy to Vercel (Recommended)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Push your code to GitHub
+2. Go to [vercel.com](https://vercel.com) and import your repository
+3. Deploy!
 
-## Deploy on Vercel
+### Enable Image Uploads
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+After deploying to Vercel:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# us
-# us
+1. Go to your project dashboard
+2. Click **Storage** → **Create** → **Blob**
+3. Follow the setup wizard
+4. The `BLOB_READ_WRITE_TOKEN` is auto-added to your environment
+5. Redeploy to enable uploads
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS v4
+- **State Management**: Zustand (with localStorage persistence)
+- **Animations**: Framer Motion
+- **Maps**: React Leaflet
+- **Storage**: Vercel Blob
+- **UI Components**: shadcn/ui patterns
+
+## 📁 Project Structure
+
+```
+src/
+├── app/
+│   ├── admin/          # Admin panel pages
+│   ├── api/upload/     # File upload API
+│   ├── bucket-list/    # Bucket list page
+│   ├── capsule/        # Time capsule page
+│   ├── gallery/        # Photo gallery
+│   ├── login/          # Login page
+│   ├── map/            # Interactive map
+│   ├── quiz/           # Relationship quiz
+│   ├── timeline/       # Timeline of events
+│   ├── vault/          # Secret vault
+│   └── page.tsx        # Home page
+├── components/
+│   ├── ui/             # Reusable UI components
+│   ├── image-upload.tsx
+│   └── map-component.tsx
+└── lib/
+    ├── store.ts        # Zustand state management
+    ├── data.ts         # Default data
+    └── utils.ts        # Utilities
+```
+
+## 🎨 Customization
+
+### Change Colors
+Edit `src/app/globals.css` to modify the color palette:
+
+```css
+:root {
+  --primary: 0.65 0.15 10;      /* Romantic Rose */
+  --secondary: 0.85 0.08 280;   /* Digital Lavender */
+  --accent: 0.75 0.12 25;       /* Warm accent */
+}
+```
+
+### Update Content
+1. Go to `/admin` and login
+2. Use the sidebar to navigate to different sections
+3. Add, edit, or delete content as needed
+
+## 📝 Environment Variables
+
+Create a `.env.local` file for local development:
+
+```env
+# Required for image uploads (get from Vercel Blob)
+BLOB_READ_WRITE_TOKEN=your_token_here
+```
+
+## 🤝 Contributing
+
+This is a personal project, but feel free to fork and customize for your own relationship!
+
+## 📄 License
+
+MIT License - Use it however you'd like.
+
+---
+
+Made with 💕 for Roshan & Alisha
