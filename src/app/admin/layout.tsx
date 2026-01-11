@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -17,7 +17,8 @@ import {
   X,
   Home,
   LogOut,
-  Shield
+  Shield,
+  Heart
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,6 +37,44 @@ const navItems = [
   { href: "/admin/capsule", label: "Time Capsule", icon: Hourglass },
 ];
 
+// Auth state management outside React
+let authState = false;
+const authListeners = new Set<() => void>();
+
+function getAuthSnapshot() {
+  return authState;
+}
+
+function getServerSnapshot() {
+  return false;
+}
+
+function subscribeAuth(callback: () => void) {
+  authListeners.add(callback);
+  return () => authListeners.delete(callback);
+}
+
+function setAuth(value: boolean) {
+  authState = value;
+  if (typeof window !== "undefined") {
+    if (value) {
+      sessionStorage.setItem("admin_auth", "true");
+    } else {
+      sessionStorage.removeItem("admin_auth");
+    }
+  }
+  authListeners.forEach(l => l());
+}
+
+// Initialize auth state from sessionStorage
+if (typeof window !== "undefined") {
+  authState = sessionStorage.getItem("admin_auth") === "true";
+}
+
+function useAdminAuth() {
+  return useSyncExternalStore(subscribeAuth, getAuthSnapshot, getServerSnapshot);
+}
+
 function AdminLogin({ onLogin }: { onLogin: () => void }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
@@ -44,7 +83,7 @@ function AdminLogin({ onLogin }: { onLogin: () => void }) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (password === settings.adminPassword) {
-      sessionStorage.setItem("admin_auth", "true");
+      setAuth(true);
       onLogin();
     } else {
       setError(true);
@@ -91,8 +130,7 @@ function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
   const pathname = usePathname();
 
   const handleLogout = () => {
-    sessionStorage.removeItem("admin_auth");
-    window.location.reload();
+    setAuth(false);
   };
 
   return (
@@ -172,24 +210,26 @@ function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const hydrated = useStoreHydrated();
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    if (typeof window !== "undefined") {
-      return sessionStorage.getItem("admin_auth") === "true";
-    }
-    return false;
-  });
+  const isAuthenticated = useAdminAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  // Show loading while checking hydration
   if (!hydrated) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-romantic-gradient">
-        <div className="animate-pulse text-muted-foreground">Loading...</div>
+        <div className="absolute inset-0 bg-romantic-radial" />
+        <motion.div
+          animate={{ scale: [1, 1.1, 1] }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+        >
+          <Heart className="w-8 h-8 text-primary/50 fill-primary/30" />
+        </motion.div>
       </div>
     );
   }
 
   if (!isAuthenticated) {
-    return <AdminLogin onLogin={() => setIsAuthenticated(true)} />;
+    return <AdminLogin onLogin={() => {}} />;
   }
 
   return (

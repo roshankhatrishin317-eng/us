@@ -5,7 +5,8 @@
       "Bash(npm install:*)",
       "Bash(npx tailwindcss:*)",
       "Bash(npx:*)",
-      "Bash(yes:*)"
+      "Bash(yes:*)",
+      "Bash(npm run lint)"
     ]
   }
 }
