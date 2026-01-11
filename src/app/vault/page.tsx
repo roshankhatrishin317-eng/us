@@ -7,11 +7,11 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAppStore } from "@/lib/store";
-import { useHydrated } from "@/lib/use-hydrated";
+import { useStoreHydrated } from "@/lib/use-hydrated";
 
 export default function VaultPage() {
   const { settings, vault } = useAppStore();
-  const hydrated = useHydrated();
+  const hydrated = useStoreHydrated();
   const [code, setCode] = useState("");
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [error, setError] = useState(false);

@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useAppStore, MapLocation } from "@/lib/store";
-import { useHydrated } from "@/lib/use-hydrated";
+import { useStoreHydrated } from "@/lib/use-hydrated";
 import L from "leaflet";
 
 const icon = L.icon({
@@ -32,7 +32,7 @@ function FitBounds({ locations }: { locations: MapLocation[] }) {
 
 export default function MapComponent() {
   const { locations } = useAppStore();
-  const hydrated = useHydrated();
+  const hydrated = useStoreHydrated();
 
   if (!hydrated) {
     return (

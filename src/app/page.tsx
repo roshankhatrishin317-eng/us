@@ -6,7 +6,7 @@ import { Heart, ArrowRight, MapPin, Camera, Lock, Trophy, ListTodo, Hourglass, S
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useAppStore } from "@/lib/store";
-import { useHydrated } from "@/lib/use-hydrated";
+import { useStoreHydrated } from "@/lib/use-hydrated";
 
 const SPARKLE_POSITIONS = [
   { x: 15, y: 20 }, { x: 85, y: 10 }, { x: 45, y: 80 },
@@ -126,7 +126,7 @@ function BentoCard({
 
 export default function Home() {
   const { settings } = useAppStore();
-  const hydrated = useHydrated();
+  const hydrated = useStoreHydrated();
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,

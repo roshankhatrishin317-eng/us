@@ -7,11 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useAppStore } from "@/lib/store";
-import { useHydrated } from "@/lib/use-hydrated";
+import { useStoreHydrated } from "@/lib/use-hydrated";
 
 export default function LoginPage() {
   const { settings } = useAppStore();
-  const hydrated = useHydrated();
+  const hydrated = useStoreHydrated();
   const [passcode, setPasscode] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();

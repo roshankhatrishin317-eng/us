@@ -6,12 +6,12 @@ import { ArrowLeft, Check, X, Trophy, RefreshCcw } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useAppStore } from "@/lib/store";
-import { useHydrated } from "@/lib/use-hydrated";
+import { useStoreHydrated } from "@/lib/use-hydrated";
 import confetti from "canvas-confetti";
 
 export default function QuizPage() {
   const { quiz } = useAppStore();
-  const hydrated = useHydrated();
+  const hydrated = useStoreHydrated();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [showScore, setShowScore] = useState(false);

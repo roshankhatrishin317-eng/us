@@ -6,11 +6,11 @@ import { ArrowLeft, Lock, Timer, Hourglass } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useAppStore } from "@/lib/store";
-import { useHydrated } from "@/lib/use-hydrated";
+import { useStoreHydrated } from "@/lib/use-hydrated";
 
 export default function CapsulePage() {
   const { capsule } = useAppStore();
-  const hydrated = useHydrated();
+  const hydrated = useStoreHydrated();
   const [timeLeft, setTimeLeft] = useState<{days: number, hours: number, minutes: number, seconds: number} | null>(null);
   const [isUnlocked, setIsUnlocked] = useState(false);
 

@@ -22,7 +22,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAppStore } from "@/lib/store";
-import { useHydrated } from "@/lib/use-hydrated";
+import { useStoreHydrated } from "@/lib/use-hydrated";
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: Home },
@@ -171,7 +171,7 @@ function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) 
 }
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const hydrated = useHydrated();
+  const hydrated = useStoreHydrated();
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     if (typeof window !== "undefined") {
       return sessionStorage.getItem("admin_auth") === "true";

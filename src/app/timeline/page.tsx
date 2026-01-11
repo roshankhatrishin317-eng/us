@@ -6,7 +6,7 @@ import { ArrowLeft, Calendar } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useAppStore, TimelineEvent } from "@/lib/store";
-import { useHydrated } from "@/lib/use-hydrated";
+import { useStoreHydrated } from "@/lib/use-hydrated";
 
 function TimelineItem({ event, index }: { event: TimelineEvent; index: number }) {
   const isEven = index % 2 === 0;
@@ -66,7 +66,7 @@ function TimelineItem({ event, index }: { event: TimelineEvent; index: number })
 
 export default function TimelinePage() {
   const { timeline } = useAppStore();
-  const hydrated = useHydrated();
+  const hydrated = useStoreHydrated();
 
   const sortedTimeline = [...timeline].sort((a, b) => 
     new Date(a.date).getTime() - new Date(b.date).getTime()

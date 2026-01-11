@@ -5,11 +5,11 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useAppStore } from "@/lib/store";
-import { useHydrated } from "@/lib/use-hydrated";
+import { useStoreHydrated } from "@/lib/use-hydrated";
 
 export default function GalleryPage() {
   const { gallery } = useAppStore();
-  const hydrated = useHydrated();
+  const hydrated = useStoreHydrated();
 
   if (!hydrated) {
     return (
