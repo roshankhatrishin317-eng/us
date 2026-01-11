@@ -8,32 +8,76 @@ import { Button } from "@/components/ui/button";
 import { useAppStore } from "@/lib/store";
 import { useHydrated } from "@/lib/use-hydrated";
 
+const SPARKLE_POSITIONS = [
+  { x: 15, y: 20 }, { x: 85, y: 10 }, { x: 45, y: 80 },
+  { x: 70, y: 45 }, { x: 25, y: 60 }, { x: 90, y: 75 },
+  { x: 10, y: 90 }, { x: 55, y: 30 }, { x: 35, y: 50 },
+  { x: 80, y: 85 }, { x: 5, y: 40 }, { x: 65, y: 15 }
+];
+
 function FloatingHearts() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {[...Array(6)].map((_, i) => (
+      {[...Array(8)].map((_, i) => (
         <motion.div
           key={i}
           initial={{ 
             opacity: 0, 
             y: "100vh",
-            x: `${10 + i * 15}vw`
+            x: `${5 + i * 12}vw`,
+            rotate: 0,
+            scale: 0.5
           }}
           animate={{ 
-            opacity: [0, 0.6, 0.6, 0],
+            opacity: [0, 0.7, 0.7, 0],
             y: "-10vh",
+            rotate: [0, 15, -15, 0],
+            scale: [0.5, 1, 1, 0.5]
           }}
           transition={{
-            duration: 12 + i * 2,
+            duration: 15 + i * 2,
             repeat: Infinity,
-            delay: i * 3,
-            ease: "linear"
+            delay: i * 2.5,
+            ease: "easeInOut"
           }}
           className="absolute"
         >
           <Heart 
-            className={`text-primary/20 fill-primary/10 ${i % 2 === 0 ? 'w-6 h-6' : 'w-4 h-4'}`}
+            className={`text-primary/30 fill-primary/20 ${i % 3 === 0 ? 'w-8 h-8' : i % 2 === 0 ? 'w-5 h-5' : 'w-3 h-3'}`}
           />
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+function SparkleParticles() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {SPARKLE_POSITIONS.map((pos, i) => (
+        <motion.div
+          key={i}
+          initial={{ 
+            opacity: 0,
+            scale: 0,
+          }}
+          style={{
+            left: `${pos.x}%`,
+            top: `${pos.y}%`
+          }}
+          animate={{ 
+            opacity: [0, 1, 0],
+            scale: [0, 1, 0],
+          }}
+          transition={{
+            duration: 2.5,
+            repeat: Infinity,
+            delay: i * 0.4,
+            ease: "easeInOut"
+          }}
+          className="absolute"
+        >
+          <Sparkles className="w-3 h-3 text-primary/40" />
         </motion.div>
       ))}
     </div>
@@ -127,84 +171,200 @@ export default function Home() {
       {/* Floating Hearts */}
       <FloatingHearts />
       
+      {/* Sparkle Particles */}
+      <SparkleParticles />
+      
       {/* Large Decorative Blurs */}
-      <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] animate-pulse-soft" />
-      <div className="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-secondary/15 rounded-full blur-[150px] animate-pulse-soft" style={{ animationDelay: '1.5s' }} />
+      <motion.div 
+        animate={{ 
+          scale: [1, 1.2, 1],
+          opacity: [0.1, 0.15, 0.1]
+        }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px]" 
+      />
+      <motion.div 
+        animate={{ 
+          scale: [1, 1.15, 1],
+          opacity: [0.15, 0.2, 0.15]
+        }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        className="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-secondary/15 rounded-full blur-[150px]" 
+      />
+      <motion.div 
+        animate={{ 
+          scale: [1, 1.3, 1],
+          x: [0, 50, 0],
+          y: [0, -30, 0]
+        }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-[30%] left-[20%] w-[300px] h-[300px] bg-accent/10 rounded-full blur-[100px]" 
+      />
       
       <div className="paper-texture" />
 
       <div className="z-10 w-full max-w-6xl grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
         {/* HERO SECTION */}
-        <BentoCard className="md:col-span-2 lg:col-span-2 row-span-2 flex flex-col justify-between min-h-[420px] glow-primary">
-          <div className="space-y-6">
+        <BentoCard className="md:col-span-2 lg:col-span-2 row-span-2 flex flex-col justify-between min-h-[420px] glow-primary relative overflow-visible">
+          {/* Animated gradient orb behind text */}
+          <motion.div
+            animate={{ 
+              rotate: 360,
+              scale: [1, 1.1, 1]
+            }}
+            transition={{ 
+              rotate: { duration: 20, repeat: Infinity, ease: "linear" },
+              scale: { duration: 4, repeat: Infinity, ease: "easeInOut" }
+            }}
+            className="absolute -top-10 -right-10 w-40 h-40 bg-gradient-to-br from-primary/30 via-secondary/20 to-accent/20 rounded-full blur-3xl"
+          />
+          
+          <div className="space-y-8 relative">
+            {/* Badge */}
             <motion.div 
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.3, type: "spring", bounce: 0.5 }}
-              className="flex items-center gap-3"
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ delay: 0.2, type: "spring", stiffness: 200, damping: 15 }}
+              className="flex items-center gap-4"
             >
-              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center shadow-lg shadow-primary/10">
-                <Heart className="w-6 h-6 text-primary fill-primary/30 animate-pulse" />
-              </div>
-              <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-primary/40" />
-                <span className="text-xs font-bold tracking-[0.2em] text-primary/60 uppercase">
-                  Our Love Story
-                </span>
+              <motion.div 
+                animate={{ 
+                  boxShadow: ["0 0 20px rgba(var(--primary), 0.3)", "0 0 40px rgba(var(--primary), 0.5)", "0 0 20px rgba(var(--primary), 0.3)"]
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="h-14 w-14 rounded-2xl bg-gradient-to-br from-primary/30 to-secondary/20 flex items-center justify-center shadow-xl backdrop-blur-sm border border-white/20"
+              >
+                <motion.div
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                >
+                  <Heart className="w-7 h-7 text-primary fill-primary/50" />
+                </motion.div>
+              </motion.div>
+              <div className="flex flex-col">
+                <motion.div 
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="flex items-center gap-2"
+                >
+                  <Sparkles className="w-4 h-4 text-primary/60" />
+                  <span className="text-xs font-bold tracking-[0.25em] text-primary/80 uppercase">
+                    Our Love Story
+                  </span>
+                  <Sparkles className="w-4 h-4 text-primary/60" />
+                </motion.div>
+                <motion.span 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.6 }}
+                  className="text-[10px] text-muted-foreground/60 tracking-wider mt-1"
+                >
+                  Since {new Date(settings.relationshipStartDate).toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+                </motion.span>
               </div>
             </motion.div>
             
-            <h1 className="font-serif text-5xl md:text-7xl text-foreground tracking-tight leading-[0.9]">
-              <motion.span
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.4 }}
-                className="block"
-              >
-                {settings.coupleName.split(" & ")[0]}
-              </motion.span>
+            {/* Names with dramatic stagger */}
+            <div className="relative">
+              <h1 className="font-serif text-6xl md:text-8xl text-foreground tracking-tight leading-[0.85]">
+                <motion.span
+                  initial={{ opacity: 0, y: 50, rotateX: -90 }}
+                  animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                  transition={{ delay: 0.3, duration: 0.8, type: "spring", stiffness: 100 }}
+                  className="block bg-gradient-to-r from-foreground via-foreground to-primary/80 bg-clip-text"
+                >
+                  {settings.coupleName.split(" & ")[0]}
+                </motion.span>
+                
+                <motion.span
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.6, type: "spring", bounce: 0.5 }}
+                  className="inline-flex items-center justify-center my-2"
+                >
+                  <span className="relative">
+                    <span className="text-4xl md:text-5xl text-primary/30 font-light">&</span>
+                    <motion.span
+                      animate={{ rotate: [0, 10, -10, 0] }}
+                      transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+                      className="absolute -top-1 -right-3"
+                    >
+                      <Heart className="w-4 h-4 text-primary/50 fill-primary/30" />
+                    </motion.span>
+                  </span>
+                </motion.span>
+                
+                <motion.span
+                  initial={{ opacity: 0, y: 50, rotateX: 90 }}
+                  animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                  transition={{ delay: 0.5, duration: 0.8, type: "spring", stiffness: 100 }}
+                  className="block bg-gradient-to-r from-primary/80 via-foreground to-foreground bg-clip-text"
+                >
+                  {settings.coupleName.split(" & ")[1]}
+                </motion.span>
+              </h1>
+              
+              {/* Decorative line */}
+              <motion.div
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ delay: 0.9, duration: 0.8 }}
+                className="absolute -bottom-4 left-0 h-[2px] w-24 bg-gradient-to-r from-primary/60 to-transparent origin-left"
+              />
+            </div>
+            
+            {/* Tagline with typewriter effect feel */}
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1 }}
+              className="text-lg md:text-xl text-muted-foreground/80 font-light max-w-md leading-relaxed italic"
+            >
               <motion.span
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                className="text-primary/40 mx-2"
+                transition={{ delay: 1.1 }}
               >
-                &
-              </motion.span>
+                A digital sanctuary for our shared moments,
+              </motion.span>{" "}
               <motion.span
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.6 }}
-                className="block"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.3 }}
+                className="text-primary/70"
               >
-                {settings.coupleName.split(" & ")[1]}
+                whispered secrets,
+              </motion.span>{" "}
+              <motion.span
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.5 }}
+              >
+                and the infinite love between us.
               </motion.span>
-            </h1>
-            
-            <motion.p 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.7 }}
-              className="text-lg text-muted-foreground font-light max-w-md leading-relaxed"
-            >
-              A digital sanctuary for our shared moments, whispered secrets, and the infinite love between us.
             </motion.p>
           </div>
           
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9 }}
+            transition={{ delay: 1.2, type: "spring" }}
             className="flex gap-4 mt-8"
           >
              <Button
                 asChild
                 size="lg"
-                className="group glow-primary"
+                className="group glow-primary relative overflow-hidden"
               >
                 <Link href="/timeline">
+                  <motion.span
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                    animate={{ x: ["-100%", "100%"] }}
+                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                  />
                   Begin Our Journey 
-                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-2 transition-transform duration-300" />
                 </Link>
               </Button>
           </motion.div>
