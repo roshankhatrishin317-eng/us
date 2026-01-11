@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Save, Eye, EyeOff, Settings, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import { useAppStore } from "@/lib/store";
 
 export default function SettingsPage() {
@@ -46,12 +47,34 @@ export default function SettingsPage() {
 
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground">Relationship Start Date</label>
-            <Input
-              type="datetime-local"
-              value={form.relationshipStartDate.slice(0, 16)}
-              onChange={(e) => setForm({ ...form, relationshipStartDate: e.target.value + ":00" })}
+            <div className="flex gap-2">
+              <Input
+                type="datetime-local"
+                value={form.relationshipStartDate ? form.relationshipStartDate.slice(0, 16) : ""}
+                onChange={(e) => setForm({ ...form, relationshipStartDate: e.target.value ? e.target.value + ":00" : "" })}
+                className="flex-1"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setForm({ ...form, relationshipStartDate: "" })}
+                className="shrink-0"
+              >
+                Clear
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground">Used for the countdown timer. Leave empty to show 00:00:00:00.</p>
+          </div>
+
+          <div className="flex items-center justify-between rounded-lg border border-border/50 p-4">
+            <div className="space-y-0.5">
+              <label className="text-sm font-medium text-foreground">Show Countdown Timer</label>
+              <p className="text-xs text-muted-foreground">Toggle to hide the timer on the homepage (Null Mode).</p>
+            </div>
+            <Switch
+              checked={form.showTimer}
+              onCheckedChange={(checked: boolean) => setForm({ ...form, showTimer: checked })}
             />
-            <p className="text-xs text-muted-foreground">Used for the countdown timer on the homepage.</p>
           </div>
         </div>
 

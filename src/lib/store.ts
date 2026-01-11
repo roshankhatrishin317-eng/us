@@ -46,6 +46,7 @@ export interface QuizQuestion {
 export interface SiteSettings {
   coupleName: string;
   relationshipStartDate: string;
+  showTimer: boolean;
   passcode: string;
   adminPassword: string;
 }
@@ -106,6 +107,7 @@ export const useAppStore = create<AppStore>()(
       settings: {
         coupleName: "Roshan & Alisha",
         relationshipStartDate: "2022-06-15T18:30:00",
+        showTimer: true,
         passcode: "",
         adminPassword: "admin123",
       },

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Heart, ArrowRight, MapPin, Camera, Lock, Trophy, ListTodo, Hourglass, Sparkles, Calendar, Star } from "lucide-react";
+import { Heart, ArrowRight, MapPin, Camera, Lock, Trophy, ListTodo, Hourglass, Sparkles, Calendar, Star, Infinity as InfinityIcon } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -147,9 +147,28 @@ export default function Home() {
     if (!hydrated) return;
     
     const calculateTime = () => {
+      // If timer is disabled or date is empty/null, show zeros
+      if (settings.showTimer === false || !settings.relationshipStartDate || settings.relationshipStartDate.trim() === "") {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+
       const start = new Date(settings.relationshipStartDate).getTime();
+      
+      // Check if date is valid
+      if (isNaN(start)) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+
       const now = Date.now();
       const diff = now - start;
+
+      // Ensure we don't show negative values
+      if (diff < 0) {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
 
       setTimeLeft({
         days: Math.floor(diff / (1000 * 60 * 60 * 24)),
@@ -162,7 +181,7 @@ export default function Home() {
     calculateTime();
     const timer = setInterval(calculateTime, 1000);
     return () => clearInterval(timer);
-  }, [hydrated, settings.relationshipStartDate]);
+  }, [hydrated, settings.relationshipStartDate, settings.showTimer]);
 
   if (!hydrated) {
     return (
@@ -328,17 +347,26 @@ export default function Home() {
                 <Star className="w-4 h-4 text-primary/60" />
                 <span className="text-xs font-semibold tracking-[0.2em] text-primary/70 uppercase">Together</span>
               </div>
-              <div className="grid grid-cols-4 gap-2 md:gap-4">
-                <TimeCounter value={timeLeft.days} label="Days" />
-                <TimeCounter value={timeLeft.hours} label="Hours" />
-                <TimeCounter value={timeLeft.minutes} label="Mins" />
-                <TimeCounter value={timeLeft.seconds} label="Secs" />
-              </div>
-              <div className="mt-6 flex items-center justify-center gap-2 text-xs text-muted-foreground/60">
-                <Heart className="w-3 h-3 fill-primary/30 text-primary/40" />
-                <span className="tracking-wide">And counting forever...</span>
-                <Heart className="w-3 h-3 fill-primary/30 text-primary/40" />
-              </div>
+              {settings.showTimer ? (
+                <>
+                  <div className="grid grid-cols-4 gap-2 md:gap-4">
+                    <TimeCounter value={timeLeft.days} label="Days" />
+                    <TimeCounter value={timeLeft.hours} label="Hours" />
+                    <TimeCounter value={timeLeft.minutes} label="Mins" />
+                    <TimeCounter value={timeLeft.seconds} label="Secs" />
+                  </div>
+                  <div className="mt-6 flex items-center justify-center gap-2 text-xs text-muted-foreground/60">
+                    <Heart className="w-3 h-3 fill-primary/30 text-primary/40" />
+                    <span className="tracking-wide">And counting forever...</span>
+                    <Heart className="w-3 h-3 fill-primary/30 text-primary/40" />
+                  </div>
+                </>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-4">
+                  <InfinityIcon className="w-16 h-16 text-primary/50 mb-3" />
+                  <span className="text-lg font-serif text-primary/70 tracking-wide">Forever & Always</span>
+                </div>
+              )}
             </div>
           </BentoCard>
 
